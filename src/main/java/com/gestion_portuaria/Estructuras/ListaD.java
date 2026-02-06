@@ -8,9 +8,19 @@ public abstract class ListaD<T> extends Lista<T> {
         return inicio == null;
     }
 
+    @Override
     public void imprimir() {
-        super.setInicio(inicio);
-        super.imprimir();
+        NodoDoble<T> actual = inicio;
+
+        if( vacio() ) {
+            System.out.println("Lista vacía");
+            return;
+        }
+
+        while(actual != null) {
+            System.out.println(actual.getDato());
+            actual = actual.getSiguiente();
+        }
     }
 
     public void imprimirAlReves() {

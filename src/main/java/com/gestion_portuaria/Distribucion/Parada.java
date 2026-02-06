@@ -1,70 +1,32 @@
 package com.gestion_portuaria.Distribucion;
 
 public class Parada {
-    private String destinatario;
-    private String direccion;
-    private String ciudad;
-    private String pais;
-    private String codigoPostal; // El código postal no siempre es un número entero
+    private int id;
+    private String nombre;
 
-    public Parada() {
-        this.destinatario = null;
-        this.direccion = null;
-        this.ciudad = null;
-        this.pais = null;
-        this.codigoPostal = null;
+    public Parada(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
     }
 
-    public Parada(String destinatario, String direccion, String ciudad, String pais, String codigoPostal) {
-        this.destinatario = destinatario;
-        this.direccion = direccion;
-        this.ciudad = ciudad;
-        this.pais = pais;
-        this.codigoPostal = codigoPostal;
+    public int getId() {
+        return id;
     }
 
-    public String getDestinatario() {
-        return destinatario;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setDestinatario(String destinatario) {
-        this.destinatario = destinatario;
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public String getPais() {
-        return pais;
-    }
-
-    public void setPais(String pais) {
-        this.pais = pais;
-    }
-
-    public String getCodigoPostal() {
-        return codigoPostal;
-    }
-
-    public void setCodigoPostal(String codigoPostal) {
-        this.codigoPostal = codigoPostal;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     @Override
     public String toString() {
-        return destinatario + " " + direccion + " / " + ciudad + " (" + codigoPostal + ")";
+        return nombre + " (" + id + ")";
     }
 }
