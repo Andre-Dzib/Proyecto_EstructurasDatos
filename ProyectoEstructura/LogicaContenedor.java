@@ -4,6 +4,7 @@
  */
 package ProyectoEstructura;
 
+import Listas.ListaSimple;
 import Listas.Nodo;
 
 /**
@@ -26,6 +27,8 @@ public class LogicaContenedor {
         return total;
     }
     
+    
+
     public boolean existeContenedor(Contenedor con,int id){
         Nodo actual = con.getProductos().getInicio();
         while(actual != null){

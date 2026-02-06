@@ -10,6 +10,7 @@ package ProyectoEstructura;
  */
 public class Camion {
     public Contenedor contenedor;
+    public String placa;
 
     public Camion(Contenedor contenedor) {
         this.contenedor = contenedor;
@@ -21,6 +22,14 @@ public class Camion {
 
     public void setContenedor(Contenedor contenedor) {
         this.contenedor = contenedor;
+    }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
     
     

@@ -32,6 +32,34 @@ public class Modulo_B implements Pila {
          }
     }
     
+     public void moverContenedor(int idBuscado) {
+    ListaSimple pilaAux = new ListaSimple();
+    boolean encontrado = false;
+
+    // 1. Mover contenedores hasta encontrar el ID
+    while (!stack.vacio()) {
+        Contenedor c = (Contenedor) stack.eliminarInicio();
+
+        if (c.getIdContenedor() == idBuscado) {
+            // lo volvemos a meter: queda en la cima
+            stack.insertaInicio(c);
+            encontrado = true;
+            break;
+        } else {
+            pilaAux.insertaInicio(c);
+        }
+    }
+
+    // 2. Regresar los contenedores auxiliares
+    while (!pilaAux.vacio()) {
+        stack.insertaInicio(pilaAux.eliminarInicio());
+    }
+
+    if (!encontrado) {
+        System.out.println("Contenedor no encontrado");
+    }
+}
+    
     public Contenedor sacar(){
         if(stack.vacio()){
             System.out.println("La pila esta vacia");
