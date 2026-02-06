@@ -1,6 +1,9 @@
 package ModuloC;
 
-public class Contenedor extends Lista{
+import Estructuras.Lista;
+import Estructuras.Nodo;
+
+public class Contenedor extends Lista {
     private double pesoTotal;
     public Contenedor(){
         inicio = ultimo = null;
@@ -23,7 +26,7 @@ public class Contenedor extends Lista{
             actual = actual.getSiguiente();
         }
     }
-    public boolean busquedaProducto(int id){
+    public boolean existeProducto(int id){
         Nodo actual = inicio;
         while(actual != null){
             Producto producto = (Producto) actual.getDato(); // Producto actual
@@ -32,7 +35,7 @@ public class Contenedor extends Lista{
         }
         return false; // Si llego hasta aquí, entonces no existia dentro
     }
-    public boolean busquedaProducto(String nombre){
+    public boolean existeProducto(String nombre){
         Nodo actual = inicio; // nodo auxiliar
         while(actual != null){ // Mientras no llegue al final de la lista
             Producto producto = (Producto) actual.getDato(); // Producto actual
@@ -119,8 +122,8 @@ public class Contenedor extends Lista{
         System.out.println("\n\n\n________________________________________________\n\n\n");
         System.out.println("Lista de productos dentro del contenedor");
         contenedor.imprimirContenido();
-        System.out.println("Confirmar si existe producto con ID 6... " + contenedor.busquedaProducto(6));
-        System.out.println("Confirmar si existe producto con nombre: 'Vainilla'... " + contenedor.busquedaProducto("Vainilla"));
+        System.out.println("Confirmar si existe producto con ID 6... " + contenedor.existeProducto(6));
+        System.out.println("Confirmar si existe producto con nombre: 'Vainilla'... " + contenedor.existeProducto("Vainilla"));
         System.out.println("\n\n\n________________________________________________\n\n\n");
         System.out.println("Lista de productos en proceso de eliminación");
         contenedor.imprimirContenido();
@@ -148,8 +151,8 @@ public class Contenedor extends Lista{
         contenedor.eliminaInicio();
         System.out.println("\n --------- Se elimino el primero");
         System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        System.out.println("Confirmar si aun existe producto con ID 6 ... " + contenedor.busquedaProducto(6));
-        System.out.println("Confirmar si aun existe producto con nombre: 'Vainilla' ... " + contenedor.busquedaProducto("Vainilla"));
+        System.out.println("Confirmar si aun existe producto con ID 6 ... " + contenedor.existeProducto(6));
+        System.out.println("Confirmar si aun existe producto con nombre: 'Vainilla' ... " + contenedor.existeProducto("Vainilla"));
 
     }
 
