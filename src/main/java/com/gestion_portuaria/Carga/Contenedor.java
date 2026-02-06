@@ -4,20 +4,25 @@ import com.gestion_portuaria.Estructuras.Lista;
 import com.gestion_portuaria.Estructuras.Nodo;
 
 public class Contenedor extends Lista<Producto> {
-    private double pesoTotal;
     public Contenedor(){
         inicio = ultimo = null;
-        this.pesoTotal = 0;
     }
     public Contenedor(Producto producto){
         inicio = ultimo = new Nodo<Producto>(producto);
-        this.pesoTotal = producto.getPeso();
     }
-    // Métodos propios
+
     public double getPesoTotal() {
-        if (pesoTotal <0) return 0;
+        double pesoTotal = 0;
+        Nodo<Producto> actual = inicio;
+
+        while( actual != null ) {
+            pesoTotal += actual.getDato().getPeso();
+            actual = actual.getSiguiente();
+        }
+
         return pesoTotal;
     }
+
     public void imprimirContenido(){
         Nodo<Producto> actual = inicio;
         while (actual != null){
@@ -26,82 +31,92 @@ public class Contenedor extends Lista<Producto> {
             actual = actual.getSiguiente();
         }
     }
+
     public boolean existeProducto(int id){
         Nodo<Producto> actual = inicio;
         while(actual != null){
-            Producto producto = actual.getDato(); // Producto actual
-            if(producto.getId() == id) return true; // Si lo encontró, retorna verdad
-            actual = actual.getSiguiente(); // Cambia al siguiente nodo
+            Producto producto = actual.getDato();
+            if( producto.getId() == id ) {
+                return true;
+            }
+            actual = actual.getSiguiente();
         }
-        return false; // Si llego hasta aquí, entonces no existía dentro
+        return false;
     }
+
     public boolean existeProducto(String nombre){
-        Nodo<Producto> actual = inicio; // nodo auxiliar
-        while(actual != null){ // Mientras no llegue al final de la lista
-            Producto producto = actual.getDato(); // Producto actual
-            if(producto.getNombre().equals(nombre)) return true; // Si lo encontró, retorna verdad
-            actual = actual.getSiguiente(); // cambia al siguiente nodo
+        Nodo<Producto> actual = inicio;
+        while(actual != null){
+            Producto producto = actual.getDato();
+            if( producto.getNombre().equals(nombre) ) {
+                return true;
+            }
+            actual = actual.getSiguiente();
         }
-        return false; // Si llego hasta aquí, entonces no existía dentro
+        return false;
     }
-    // Métodos heredados
+
     @Override
     public void insertaInicio(Producto dato) {
         Nodo<Producto> nuevo = new Nodo<Producto>(dato);
-        if(vacio()){ // Lista vacia
+        if( vacio() ) {
             inicio = ultimo = nuevo;
         }
-        else{
+        else {
             nuevo.setSiguiente(inicio);
             inicio = nuevo;
         }
-        this.pesoTotal += dato.getPeso();
     }
 
     @Override
     public void insertaFinal(Producto dato) {
         Nodo<Producto> nuevo = new Nodo<Producto>(dato);
-        if(vacio()){
+        if( vacio() ){
             inicio = ultimo = nuevo;
         }
         else{
             ultimo.setSiguiente(nuevo);
             ultimo = nuevo;
         }
-        this.pesoTotal += dato.getPeso();
     }
 
     @Override
     public Producto eliminaInicio() {
-        if (vacio()) return null; // Lista vacia
-        Producto productoEliminado = inicio.getDato(); // Primer producto
-        inicio = inicio.getSiguiente(); // Cambiar al siguiente producto en la lista
-        if(inicio == null) ultimo = null; // Si vaciaron todo
-        this.pesoTotal -= productoEliminado.getPeso(); // Quitar el peso
-        return productoEliminado; // Regresar el producto eliminado
+        if ( vacio() ){
+            return null;
+        }
+        Producto productoEliminado = inicio.getDato();
+        inicio = inicio.getSiguiente();
+
+        // Si vaciaron completamente el contenedor
+        if( inicio == null ) {
+            ultimo = null;
+        }
+        return productoEliminado;
     }
 
     @Override
     public Producto eliminaFinal() {
-        if (vacio()) return null; // Lista vacia
-        Producto productoEliminado = null;// Producto eliminado
-        if (inicio == ultimo){ // Si solo hay un nodo
-            productoEliminado = inicio.getDato(); // Obtener producto eliminado
-            inicio = ultimo = null; // Vaciar lsita
+        if( vacio() ) {
+            return null;
+        }
+
+        Producto productoEliminado = ultimo.getDato();
+        if ( inicio == ultimo ){
+            inicio = ultimo = null;
         }
         else{
-            Nodo<Producto> actual = inicio; // Nodo Auxiliar
-            while(actual.getSiguiente() != ultimo){ // Para llegar al final de la lista
-                actual = actual.getSiguiente(); // Llegar al penultimo de la lista
+            Nodo<Producto> actual = inicio;
+            while( actual.getSiguiente() != ultimo ){
+                actual = actual.getSiguiente();
             }
-            productoEliminado = (Producto) ultimo.getDato(); // Obtener producto eliminado
-            actual.setSiguiente(null); // No hay más alla en la lista
-            ultimo = actual; // el ultiimo pasa ser el penultimo
+            actual.setSiguiente(null);
+            ultimo = actual;
         }
-        this.pesoTotal -= productoEliminado.getPeso(); // Restar al peso
-        return productoEliminado; // Retornar producto eliminado
+        return productoEliminado;
     }
-    // Para probar
+
+    // Pruebas
     public static void main(String[] args) {
         Contenedor contenedor = new Contenedor();
         contenedor.insertaInicio(new Producto(1, "Palomas", 10.1));
@@ -150,7 +165,5 @@ public class Contenedor extends Lista<Producto> {
         System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
         System.out.println("Confirmar si aun existe producto con ID 6 ... " + contenedor.existeProducto(6));
         System.out.println("Confirmar si aun existe producto con nombre: 'Vainilla' ... " + contenedor.existeProducto("Vainilla"));
-
     }
-
 }

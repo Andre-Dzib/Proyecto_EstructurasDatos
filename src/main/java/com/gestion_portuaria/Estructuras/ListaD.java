@@ -17,7 +17,7 @@ public abstract class ListaD<T> extends Lista<T> {
             return;
         }
 
-        while(actual != null) {
+        while( actual != null ) {
             System.out.println(actual.getDato());
             actual = actual.getSiguiente();
         }
@@ -26,7 +26,7 @@ public abstract class ListaD<T> extends Lista<T> {
     public void imprimirAlReves() {
         NodoDoble<T> actual = ultimo;
 
-        while(actual != null) {
+        while( actual != null ) {
             System.out.println(actual.getDato() + "->");
             actual = actual.getAnterior();
         }

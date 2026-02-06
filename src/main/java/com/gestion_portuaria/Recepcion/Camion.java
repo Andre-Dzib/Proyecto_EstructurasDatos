@@ -1,19 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package ProyectoEstructura;
+package com.gestion_portuaria.Recepcion;
 
-/**
- *
- * @author ojeda
- */
+import com.gestion_portuaria.Carga.Contenedor;
+
 public class Camion {
-    public Contenedor contenedor;
-    public String placa;
+    protected Contenedor contenedor;
+    protected String placa;
 
-    public Camion(Contenedor contenedor) {
+    public Camion() {
+        contenedor = null;
+        placa = null;
+    }
+
+    public Camion(Contenedor contenedor, String placa) {
         this.contenedor = contenedor;
+        this.placa = placa;
     }
 
     public Contenedor getContenedor() {
@@ -31,7 +31,4 @@ public class Camion {
     public void setPlaca(String placa) {
         this.placa = placa;
     }
-    
-    
-    
 }
