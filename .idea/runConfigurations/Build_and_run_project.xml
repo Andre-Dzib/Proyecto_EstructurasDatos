@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Build and run project" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="com.gestion_portuaria.Main" />
+    <module name="gestion-portuaria" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

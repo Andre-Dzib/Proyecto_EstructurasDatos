@@ -1,8 +1,8 @@
-package ModuloC;
+package com.gestion_portuaria.Estructuras;
 
-public abstract class Lista {
-    protected Nodo inicio;
-    protected Nodo ultimo;
+public abstract class Lista<T> {
+    protected Nodo<T> inicio;
+    protected Nodo<T> ultimo;
     protected String nombre;
 
     public Lista(){
@@ -16,22 +16,22 @@ public abstract class Lista {
         return inicio == null;
     }
     public void imprimir(){
-        Nodo actual = inicio;
+        Nodo<T> actual = inicio;
         while (actual != null){
             System.out.println(actual.getDato()+"");
             actual = actual.getSiguiente();
         }
     }
-    public Nodo getInicio() {
+    public Nodo<T> getInicio() {
         return inicio;
     }
-    public void setInicio(Nodo inicio) {
+    public void setInicio(Nodo<T> inicio) {
         this.inicio = inicio;
     }
-    public Nodo getUltimo() {
+    public Nodo<T> getUltimo() {
         return ultimo;
     }
-    public void setUltimo(Nodo ultimo) {
+    public void setUltimo(Nodo<T> ultimo) {
         this.ultimo = ultimo;
     }
     public String getNombre() {
@@ -41,8 +41,8 @@ public abstract class Lista {
         this.nombre = nombre;
     }
     // Metodos que se heredarán
-    public abstract void insertaInicio(Object dato);
-    public abstract void insertaFinal(Object dato);
-    public abstract Object eliminaInicio();
-    public abstract Object eliminaFinal();
+    public abstract void insertaInicio(T dato);
+    public abstract void insertaFinal(T dato);
+    public abstract T eliminaInicio();
+    public abstract T eliminaFinal();
 }

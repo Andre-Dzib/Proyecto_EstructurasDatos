@@ -1,54 +1,53 @@
-package ModuloC;
+package com.gestion_portuaria.Carga;
 
-import Estructuras.Lista;
-import Estructuras.Nodo;
+import com.gestion_portuaria.Estructuras.Lista;
+import com.gestion_portuaria.Estructuras.Nodo;
 
-public class Contenedor extends Lista {
+public class Contenedor extends Lista<Producto> {
     private double pesoTotal;
     public Contenedor(){
         inicio = ultimo = null;
         this.pesoTotal = 0;
     }
     public Contenedor(Producto producto){
-        inicio = ultimo = new Nodo(producto);
+        inicio = ultimo = new Nodo<Producto>(producto);
         this.pesoTotal = producto.getPeso();
     }
-    // Metodos propios
+    // Métodos propios
     public double getPesoTotal() {
         if (pesoTotal <0) return 0;
         return pesoTotal;
     }
     public void imprimirContenido(){
-        Nodo actual = inicio;
+        Nodo<Producto> actual = inicio;
         while (actual != null){
-            Producto producto = (Producto) actual.getDato();
+            Producto producto = actual.getDato();
             producto.imprimir();
             actual = actual.getSiguiente();
         }
     }
     public boolean existeProducto(int id){
-        Nodo actual = inicio;
+        Nodo<Producto> actual = inicio;
         while(actual != null){
-            Producto producto = (Producto) actual.getDato(); // Producto actual
-            if(producto.getId() == id) return true; // Si lo encontro, retorna verdad
-            actual = actual.getSiguiente(); // Cambia al sigueinte nodo
+            Producto producto = actual.getDato(); // Producto actual
+            if(producto.getId() == id) return true; // Si lo encontró, retorna verdad
+            actual = actual.getSiguiente(); // Cambia al siguiente nodo
         }
-        return false; // Si llego hasta aquí, entonces no existia dentro
+        return false; // Si llego hasta aquí, entonces no existía dentro
     }
     public boolean existeProducto(String nombre){
-        Nodo actual = inicio; // nodo auxiliar
+        Nodo<Producto> actual = inicio; // nodo auxiliar
         while(actual != null){ // Mientras no llegue al final de la lista
-            Producto producto = (Producto) actual.getDato(); // Producto actual
-            if(producto.getNombre().equals(nombre)) return true; // Si lo encontro, retorna verdad
+            Producto producto = actual.getDato(); // Producto actual
+            if(producto.getNombre().equals(nombre)) return true; // Si lo encontró, retorna verdad
             actual = actual.getSiguiente(); // cambia al siguiente nodo
         }
-        return false; // Si llego hasta aquí, entonces no existia dentro
+        return false; // Si llego hasta aquí, entonces no existía dentro
     }
-    // Metodos heredados
+    // Métodos heredados
     @Override
-    public void insertaInicio(Object dato) {
-        Producto producto = (Producto) dato; // El producto nuevo
-        Nodo nuevo = new Nodo(producto);
+    public void insertaInicio(Producto dato) {
+        Nodo<Producto> nuevo = new Nodo<Producto>(dato);
         if(vacio()){ // Lista vacia
             inicio = ultimo = nuevo;
         }
@@ -56,13 +55,12 @@ public class Contenedor extends Lista {
             nuevo.setSiguiente(inicio);
             inicio = nuevo;
         }
-        this.pesoTotal += producto.getPeso();
+        this.pesoTotal += dato.getPeso();
     }
 
     @Override
-    public void insertaFinal(Object dato) {
-        Producto producto = (Producto) dato;
-        Nodo nuevo = new Nodo(producto);
+    public void insertaFinal(Producto dato) {
+        Nodo<Producto> nuevo = new Nodo<Producto>(dato);
         if(vacio()){
             inicio = ultimo = nuevo;
         }
@@ -70,13 +68,13 @@ public class Contenedor extends Lista {
             ultimo.setSiguiente(nuevo);
             ultimo = nuevo;
         }
-        this.pesoTotal += producto.getPeso();
+        this.pesoTotal += dato.getPeso();
     }
 
     @Override
-    public Object eliminaInicio() {
+    public Producto eliminaInicio() {
         if (vacio()) return null; // Lista vacia
-        Producto productoEliminado = (Producto) inicio.getDato(); // Primer producto
+        Producto productoEliminado = inicio.getDato(); // Primer producto
         inicio = inicio.getSiguiente(); // Cambiar al siguiente producto en la lista
         if(inicio == null) ultimo = null; // Si vaciaron todo
         this.pesoTotal -= productoEliminado.getPeso(); // Quitar el peso
@@ -84,22 +82,21 @@ public class Contenedor extends Lista {
     }
 
     @Override
-    public Object eliminaFinal() {
+    public Producto eliminaFinal() {
         if (vacio()) return null; // Lista vacia
         Producto productoEliminado = null;// Producto eliminado
         if (inicio == ultimo){ // Si solo hay un nodo
-            productoEliminado = (Producto) inicio.getDato(); // Obtener producto eliminado
+            productoEliminado = inicio.getDato(); // Obtener producto eliminado
             inicio = ultimo = null; // Vaciar lsita
         }
         else{
-            Nodo actual = inicio; // Nodo Auxiliar
+            Nodo<Producto> actual = inicio; // Nodo Auxiliar
             while(actual.getSiguiente() != ultimo){ // Para llegar al final de la lista
                 actual = actual.getSiguiente(); // Llegar al penultimo de la lista
             }
             productoEliminado = (Producto) ultimo.getDato(); // Obtener producto eliminado
             actual.setSiguiente(null); // No hay más alla en la lista
             ultimo = actual; // el ultiimo pasa ser el penultimo
-
         }
         this.pesoTotal -= productoEliminado.getPeso(); // Restar al peso
         return productoEliminado; // Retornar producto eliminado

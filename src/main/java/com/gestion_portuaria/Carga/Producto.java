@@ -1,4 +1,4 @@
-package ModuloC;
+package com.gestion_portuaria.Carga;
 
 public class Producto {
     private int id;
