@@ -15,49 +15,49 @@ public class Contenedor extends Lista<Producto> {
 
     // Calcula el peso total sumando el peso de todos los productos en el contenedor
     public double getPesoTotal() {
-        double pesoTotal = 0;  // Variable para acumular el peso
-        Nodo<Producto> actual = inicio;  // Puntero para recorrer la lista desde el inicio
+        double pesoTotal = 0;  
+        Nodo<Producto> actual = inicio;  
 
-        while( actual != null ) {  // Mientras haya nodos por recorrer
-            pesoTotal += actual.getDato().getPeso();  // Suma el peso del producto actual
+        while( actual != null ) {  
+            pesoTotal += actual.getDato().getPeso();  
             actual = actual.getSiguiente();  // Avanza al siguiente nodo
         }
 
         return pesoTotal;  // Retorna la suma total de pesos
     }
 
-     // Imprime el contenido completo del contenedor
+     // Imprime el contenido del contenedor
     public void imprimirContenido(){
-        Nodo<Producto> actual = inicio;  // Puntero para recorrer desde el inicio
-        while (actual != null){  // Mientras haya nodos
+        Nodo<Producto> actual = inicio;  
+        while (actual != null){  
             Producto producto = actual.getDato();  // Obtiene el producto del nodo actual
-            producto.imprimir();  // Llama al método imprimir del producto
-            actual = actual.getSiguiente();  // Avanza al siguiente nodo
+            producto.imprimir();  
+            actual = actual.getSiguiente();  //  siguiente nodo
         }
     }
 
     // Verifica si existe un producto con un ID específico
     public boolean existeProducto(int id){
-        Nodo<Producto> actual = inicio;  // Puntero para recorrer desde el inicio
-        while(actual != null){  // Mientras haya nodos
-            Producto producto = actual.getDato();  // Obtiene el producto actual
+        Nodo<Producto> actual = inicio;  
+        while(actual != null){  
+            Producto producto = actual.getDato();  
             if( producto.getId() == id ) {  // Compara el ID del producto con el buscado
                 return true;  // Retorna true si encuentra coincidencia
             }
-            actual = actual.getSiguiente();  // Avanza al siguiente nodo
+            actual = actual.getSiguiente();  
         }
         return false;  // Retorna false si no encuentra el producto
     }
 
     // Verifica si existe un producto con un nombre específico
     public boolean existeProducto(String nombre){
-        Nodo<Producto> actual = inicio;  // Puntero para recorrer desde el inicio
-        while(actual != null){  // Mientras haya nodos
-            Producto producto = actual.getDato();  // Obtiene el producto actual
+        Nodo<Producto> actual = inicio;  
+        while(actual != null){ 
+            Producto producto = actual.getDato();  
             if( producto.getNombre().equals(nombre) ) {  // Compara el nombre del producto
                 return true;  // Retorna true si encuentra coincidencia
             }
-            actual = actual.getSiguiente();  // Avanza al siguiente nodo
+            actual = actual.getSiguiente();  
         }
         return false;  // Retorna false si no encuentra el producto
     }
@@ -66,7 +66,7 @@ public class Contenedor extends Lista<Producto> {
     @Override
     public void insertaInicio(Producto dato) {
         Nodo<Producto> nuevo = new Nodo<Producto>(dato);  // Crea un nuevo nodo con el producto
-        if( vacio() ) {  // Si la lista está vacía
+        if( vacio() ) {  
             inicio = ultimo = nuevo;  // El nuevo nodo es tanto inicio como fin
         }
         else {  // Si ya hay elementos
@@ -79,7 +79,7 @@ public class Contenedor extends Lista<Producto> {
     @Override
     public void insertaFinal(Producto dato) {
         Nodo<Producto> nuevo = new Nodo<Producto>(dato);  // Crea un nuevo nodo con el producto
-        if( vacio() ){  // Si la lista está vacía
+        if( vacio() ){  
             inicio = ultimo = nuevo;  // El nuevo nodo es tanto inicio como fin
         }
         else{  // Si ya hay elementos
@@ -91,15 +91,15 @@ public class Contenedor extends Lista<Producto> {
     // Elimina y retorna el producto del inicio de la lista (sobrescribe método de la clase padre)
     @Override
     public Producto eliminaInicio() {
-        if ( vacio() ){  // Si la lista está vacía
+        if ( vacio() ){ 
             return null;  // Retorna null porque no hay nada que eliminar
         }
         Producto productoEliminado = inicio.getDato();  // Guarda el producto que se va a eliminar
-        inicio = inicio.getSiguiente();  // El inicio ahora apunta al siguiente nodo
+        inicio = inicio.getSiguiente();  // apuntar siguiente nodo
 
-        // Si después de eliminar el inicio queda null (solo había un elemento)
+        // Si después de eliminar el inicio queda vacio osea hay solo un nodo
         if( inicio == null ) {
-            ultimo = null;  // También actualiza último a null
+            ultimo = null;  // se actualiza último a null
         }
         return productoEliminado;  // Retorna el producto eliminado
     }
@@ -108,26 +108,26 @@ public class Contenedor extends Lista<Producto> {
    // Elimina y retorna el producto del final de la lista (sobrescribe método de la clase padre)
     @Override
     public Producto eliminaFinal() {
-        if( vacio() ) {  // Si la lista está vacía
+        if( vacio() ) {  
             return null;  // Retorna null porque no hay nada que eliminar
         }
 
-        Producto productoEliminado = ultimo.getDato();  // Guarda el producto que se va a eliminar
-        if ( inicio == ultimo ){  // Si solo hay un elemento en la lista
-            inicio = ultimo = null;  // Ambos punteros se ponen a null (lista vacía)
+        Producto productoEliminado = ultimo.getDato();  // Guarda el producto 
+        if ( inicio == ultimo ){  // solo hay un elemento en la lista
+            inicio = ultimo = null;  // vacio
         }
-        else{  // Si hay más de un elemento
-            Nodo<Producto> actual = inicio;  // Puntero para recorrer la lista
+        else{  // más de un elemento
+            Nodo<Producto> actual = inicio; 
             while( actual.getSiguiente() != ultimo ){  // Busca el penúltimo nodo
                 actual = actual.getSiguiente();  // Avanza hasta encontrar el penúltimo
             }
-            actual.setSiguiente(null);  // El penúltimo ahora apunta a null (se convierte en último)
-            ultimo = actual;  // Actualiza el puntero último al penúltimo
+            actual.setSiguiente(null);  //se convierte en el ultimo
+            ultimo = actual;  // Actualiza el puntero
         }
         return productoEliminado;  // Retorna el producto eliminado
     }
 
-    // Método main para pruebas de la clase Contenedor
+   
     // Pruebas
     public static void main(String[] args) {
         Contenedor contenedor = new Contenedor();
