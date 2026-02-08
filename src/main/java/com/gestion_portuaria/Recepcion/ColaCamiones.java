@@ -7,7 +7,7 @@ public class ColaCamiones implements Queue<Camion> {
     protected ListaSimple<Camion> colaCamiones;
     protected int longitud;
     
-    ColaCamiones() {
+    public ColaCamiones() {
         colaCamiones = new ListaSimple<Camion>();
         longitud = 0;
     }
@@ -20,6 +20,7 @@ public class ColaCamiones implements Queue<Camion> {
 
     @Override
     public Camion dequeue() {
+        longitud--;
         return colaCamiones.eliminaInicio();
     }
 

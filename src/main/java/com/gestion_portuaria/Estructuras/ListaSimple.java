@@ -49,8 +49,10 @@ public class ListaSimple<T> extends Lista<T> {
     public T eliminaFinal() {
         if( vacio() ) {
             System.out.println("La lista esta vacia");
+            return null;
         }
         size--;
+
         T eliminado = ultimo.getDato();
 
         if( inicio == ultimo ){
@@ -71,5 +73,19 @@ public class ListaSimple<T> extends Lista<T> {
 
     public int getSize() {
         return size;
+    }
+
+    public T get(int index) {
+        if( index < 0 || index >= size ) {
+            return null;
+        }
+
+        Nodo<T> actual = inicio;
+
+        for(int i = 0; i < index; i++) {
+            actual = actual.getSiguiente();
+        }
+
+        return actual.getDato();
     }
 }

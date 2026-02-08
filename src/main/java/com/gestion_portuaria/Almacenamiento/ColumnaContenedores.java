@@ -13,11 +13,12 @@ public class ColumnaContenedores implements Pila<Contenedor> {
         this.max = max;
     }
 
-    public void meterContenedor(Contenedor contenedor){
-        if( size() >= max ) {
-            return;
-        }
-        contenedores.insertaInicio(contenedor);
+    public boolean isFull() {
+        return size() >= max;
+    }
+
+    public int getMax() {
+        return max;
     }
 
     @Override
@@ -57,5 +58,4 @@ public class ColumnaContenedores implements Pila<Contenedor> {
     public boolean isEmpty() {
         return contenedores.vacio();
     }
-    
 }

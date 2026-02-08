@@ -1,16 +1,57 @@
 package com.gestion_portuaria.Distribucion;
 
+import com.gestion_portuaria.Carga.Contenedor;
 import com.gestion_portuaria.Estructuras.ListaD;
+import com.gestion_portuaria.Estructuras.ListaSimple;
 import com.gestion_portuaria.Estructuras.NodoDoble;
 
 public class Ruta extends ListaD<Parada> {
+    private ListaSimple<Contenedor> contenedores;
+    private NodoDoble<Parada> paradaActual;
 
     public Ruta() {
-        inicio = ultimo = null;
+        inicio = ultimo = paradaActual = null;
+        contenedores = null;
     }
 
     public Ruta(Parada parada) {
         insertaInicio(parada);
+        contenedores = null;
+    }
+
+    public NodoDoble<Parada> getParadaActual() {
+        return paradaActual;
+    }
+
+    public void siguienteParada() {
+        if( paradaActual == ultimo ) {
+            return;
+        }
+
+        paradaActual = paradaActual.getSiguiente();
+    }
+
+    public void anteriorParada() {
+        if( paradaActual == inicio ) {
+            return;
+        }
+
+        paradaActual = paradaActual.getAnterior();
+    }
+
+    public void setContenedores(ListaSimple<Contenedor> contenedores) {
+        this.contenedores = contenedores;
+    }
+
+    public int size() {
+        NodoDoble<Parada> actual = inicio;
+        int longitud = 0;
+        while( actual != null ) {
+            longitud++;
+            actual = actual.getSiguiente();
+        }
+
+        return longitud;
     }
 
     public NodoDoble<Parada> buscarParada(int id) {
@@ -86,36 +127,16 @@ public class Ruta extends ListaD<Parada> {
             return;
         }
 
+        if( nodo == ultimo ) {
+            insertaFinal(nueva);
+            return;
+        }
+
         NodoDoble<Parada> nuevoNodo = new NodoDoble<Parada>(nueva);
         nuevoNodo.setAnterior(nodo);
         nuevoNodo.setSiguiente(nodo.getSiguiente());
         nodo.getSiguiente().setAnterior(nuevoNodo);
         nodo.setSiguiente(nuevoNodo);
-    }
-
-    public void cancelarParada(Parada cancelada) {
-        if( vacio() ) {
-            return;
-        }
-
-        NodoDoble<Parada> nodo = buscarParada(cancelada.getId());
-        if( nodo == null ) {
-            return;
-        }
-
-        if (nodo == inicio && inicio == ultimo) {
-            inicio = ultimo = null;
-            return;
-        } else if (nodo == inicio) {
-            inicio = nodo.getSiguiente();
-            return;
-        } else if (nodo == ultimo) {
-            ultimo = nodo.getAnterior();
-            return;
-        }
-
-        nodo.getAnterior().setSiguiente(nodo.getSiguiente());
-        nodo.getSiguiente().setAnterior(nodo.getAnterior());
     }
 
     public void cancelarParada(String nombre) {
@@ -129,16 +150,25 @@ public class Ruta extends ListaD<Parada> {
         }
 
         if (nodo == inicio && inicio == ultimo) {
-            inicio = ultimo = null;
+            inicio = ultimo = paradaActual = null;
             return;
         } else if (nodo == inicio) {
             inicio = nodo.getSiguiente();
+            if( nodo == paradaActual ) {
+                paradaActual = inicio;
+            }
             return;
         } else if (nodo == ultimo) {
             ultimo = nodo.getAnterior();
+            if( nodo == paradaActual ) {
+                paradaActual = ultimo;
+            }
             return;
         }
 
+        if( nodo == paradaActual ) {
+            paradaActual = nodo.getAnterior();
+        }
         nodo.getAnterior().setSiguiente(nodo.getSiguiente());
         nodo.getSiguiente().setAnterior(nodo.getAnterior());
     }
@@ -154,18 +184,29 @@ public class Ruta extends ListaD<Parada> {
         }
 
         if( nodo == inicio && inicio == ultimo ) {
-            inicio = ultimo = null;
+            inicio = ultimo = paradaActual = null;
             return;
         }
         else if( nodo == inicio ) {
             inicio = nodo.getSiguiente();
+            inicio.setAnterior(null);
+            if( nodo == paradaActual ) {
+                paradaActual = inicio;
+            }
             return;
         }
         else if ( nodo == ultimo ) {
             ultimo = nodo.getAnterior();
+            ultimo.setSiguiente(null);
+            if( nodo == paradaActual ) {
+                paradaActual = ultimo;
+            }
             return;
         }
 
+        if( nodo == paradaActual ) {
+            paradaActual = nodo.getAnterior();
+        }
         nodo.getAnterior().setSiguiente(nodo.getSiguiente());
         nodo.getSiguiente().setAnterior(nodo.getAnterior());
     }
@@ -177,6 +218,7 @@ public class Ruta extends ListaD<Parada> {
             inicio = ultimo = insertar;
             inicio.setSiguiente(null);
             inicio.setAnterior(null);
+            paradaActual = inicio;
 
             return;
         }
@@ -194,6 +236,7 @@ public class Ruta extends ListaD<Parada> {
             inicio = ultimo = insertar;
             inicio.setSiguiente(null);
             inicio.setAnterior(null);
+            paradaActual = ultimo;
 
             return;
         }
@@ -209,11 +252,16 @@ public class Ruta extends ListaD<Parada> {
         Parada eliminado = inicio.getDato();
 
         if( inicio == ultimo ) {
-            inicio = ultimo = null;
+            inicio = ultimo = paradaActual = null;
             return eliminado;
         }
 
         inicio.getSiguiente().setAnterior(null);
+
+        if( paradaActual == inicio ) {
+            paradaActual = inicio.getSiguiente();
+        }
+
         inicio = inicio.getSiguiente();
 
         return eliminado;
@@ -224,11 +272,16 @@ public class Ruta extends ListaD<Parada> {
         Parada eliminado = ultimo.getDato();
 
         if( inicio == ultimo ) {
-            inicio = ultimo = null;
+            inicio = ultimo = paradaActual = null;
             return eliminado;
         }
 
         ultimo.getAnterior().setSiguiente(null);
+
+        if( paradaActual == ultimo ) {
+            paradaActual = ultimo.getAnterior();
+        }
+
         ultimo = ultimo.getAnterior();
 
         return eliminado;
@@ -255,5 +308,10 @@ public class Ruta extends ListaD<Parada> {
 
         ruta.insertaDespuesDe(8, new Parada(20, "dirección 20"));
         ruta.imprimir();
+    }
+
+    @Override
+    public String toString() {
+        return inicio == null ? "Nueva ruta" : inicio.getDato().getNombre();
     }
 }

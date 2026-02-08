@@ -23,12 +23,11 @@ public abstract class ListaD<T> extends Lista<T> {
         }
     }
 
-    public void imprimirAlReves() {
-        NodoDoble<T> actual = ultimo;
+    public NodoDoble<T> getInicio() {
+        return inicio;
+    }
 
-        while( actual != null ) {
-            System.out.println(actual.getDato() + "->");
-            actual = actual.getAnterior();
-        }
+    public NodoDoble<T> getUltimo() {
+        return ultimo;
     }
 }

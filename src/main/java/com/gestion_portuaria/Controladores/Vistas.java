@@ -4,7 +4,7 @@ import com.gestion_portuaria.Estructuras.ListaSimple;
 import com.gestion_portuaria.Estructuras.Pila;
 import com.gestion_portuaria.Vistas.Vista;
 
-public class ControladorVistas {
+public class Vistas {
     public static Vista vistaActual = null;
     public static PilaVistas vistasAnteriores = new PilaVistas();
 
