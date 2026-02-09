@@ -11,81 +11,104 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Vista principal del patio de contenedores.
+ * Permite realizar operaciones sobre las pilas de contenedores asociadas a los camiones
+ * que han ingresado al patio, incluyendo:
+ * Ingresar contenedores en las pilas (Push).
+ * Retirar contenedores para su distribución (Pop).
+ * Inspeccionar el contenedor superior de cada pila (Peek).
+ * Inspeccionar cualquier contenedor del patio.
+ */
 public class Inicio extends Vista {
+    /**
+     * Etiqueta para mostrar mensajes de estado al usuario.
+     */
     public JLabel status;
 
+    /**
+     * Configura la interfaz gráfica del patio de contenedores.
+     */
     @Override
     public void prepareGUI() {
         super.prepareGUI();
         window.setBounds(0, 0, 500, 500);
+
         status = new JLabel("", JLabel.CENTER);
         status.setBounds(0, 35, window.getWidth(), 50);
         window.add(status);
 
         Estilos.tituloCentrado(this, "Patio de contenedores", 10);
 
-        Estilos.botonCentrado(this, "Ingresar contenedor (Push)", 80).addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(Patio.entrante == null) {
-                    status.setText("No hay un camión en el patio de contenedores");
-                    return;
-                }
+        Estilos.botonCentrado(this, "Ingresar contenedor (Push)", 80)
+                .addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(Patio.entrante == null) {
+                            status.setText("No hay un camión en el patio de contenedores");
+                            return;
+                        }
 
-                SeleccionarPila seleccionarPila = new SeleccionarPila(window);
-                seleccionarPila.setVisible(true);
+                        SeleccionarPila seleccionarPila = new SeleccionarPila(window);
+                        seleccionarPila.setVisible(true);
 
-                if( seleccionarPila.numeroPila == null ) {
-                    return;
-                }
+                        if( seleccionarPila.numeroPila == null ) {
+                            return;
+                        }
 
-                Patio.columnasContenedores.get(seleccionarPila.numeroPila).push(Patio.entrante.getContenedor());
-                Patio.entrante = null;
-                status.setText("Se ha agregado el contenedor a la pila " + (seleccionarPila.numeroPila + 1));
-            }
-        });
+                        Patio.columnasContenedores.get(seleccionarPila.numeroPila)
+                                .push(Patio.entrante.getContenedor());
+                        Patio.entrante = null;
+                        status.setText("Se ha agregado el contenedor a la pila " + (seleccionarPila.numeroPila + 1));
+                    }
+                });
 
-        Estilos.botonCentrado(this, "Retirar contenedor para ruta (Pop)", 170).addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SeleccionarPila seleccionarPila = new SeleccionarPila(window, false);
-                seleccionarPila.setVisible(true);
+        Estilos.botonCentrado(this, "Retirar contenedor para ruta (Pop)", 170)
+                .addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        SeleccionarPila seleccionarPila = new SeleccionarPila(window, false);
+                        seleccionarPila.setVisible(true);
 
-                if( seleccionarPila.numeroPila == null ) {
-                    return;
-                }
+                        if( seleccionarPila.numeroPila == null ) {
+                            return;
+                        }
 
-                Contenedor contenedor = Patio.columnasContenedores.get(seleccionarPila.numeroPila).pop();
+                        Contenedor contenedor = Patio.columnasContenedores.get(seleccionarPila.numeroPila).pop();
 
-                if(Distribucion.contenedoresCargados == null) {
-                    Distribucion.contenedoresCargados = new ListaSimple<>();
-                }
+                        if(Distribucion.contenedoresCargados == null) {
+                            Distribucion.contenedoresCargados = new ListaSimple<>();
+                        }
 
-                Distribucion.contenedoresCargados.insertaFinal(contenedor);
-                status.setText("El contenedor de arriba de la pila " + (seleccionarPila.numeroPila + 1) + " ha salido para envío");
-            }
-        });
+                        Distribucion.contenedoresCargados.insertaFinal(contenedor);
+                        status.setText("El contenedor de arriba de la pila "
+                                + (seleccionarPila.numeroPila + 1) + " ha salido para envío");
+                    }
+                });
 
-        Estilos.botonCentrado(this, "Ver tope de las pilas (Peek)", 260).addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SeleccionarPila seleccionarPila = new SeleccionarPila(window, false);
-                seleccionarPila.setVisible(true);
+        Estilos.botonCentrado(this, "Ver tope de las pilas (Peek)", 260)
+                .addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        SeleccionarPila seleccionarPila = new SeleccionarPila(window, false);
+                        seleccionarPila.setVisible(true);
 
-                if( seleccionarPila.numeroPila == null ) {
-                    return;
-                }
+                        if( seleccionarPila.numeroPila == null ) {
+                            return;
+                        }
 
-                InspeccionarContenedor inspeccionarContenedor = new InspeccionarContenedor(Patio.columnasContenedores.get(seleccionarPila.numeroPila).top());
-                inspeccionarContenedor.run();
-            }
-        });
+                        InspeccionarContenedor inspeccionarContenedor =
+                                new InspeccionarContenedor(Patio.columnasContenedores.get(seleccionarPila.numeroPila).top());
+                        inspeccionarContenedor.run();
+                    }
+                });
 
-        Estilos.botonCentrado(this, "Inspeccionar contenedor", 350).addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new SeleccionarContenedor().run();
-            }
-        });
+        Estilos.botonCentrado(this, "Inspeccionar contenedor", 350)
+                .addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        new SeleccionarContenedor().run();
+                    }
+                });
     }
 }

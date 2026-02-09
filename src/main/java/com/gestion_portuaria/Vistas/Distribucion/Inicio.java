@@ -9,7 +9,20 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Vista principal del módulo de logística y distribución.
+ * Permite al usuario crear nuevas rutas con contenedores cargados,
+ * listar todas las rutas existentes, y abrir la inspección de cada ruta.
+ */
 public class Inicio extends Vista {
+    /**
+     * Prepara la interfaz gráfica de la vista.
+     * Incluye:
+     * Botón "Zarpar del puerto" para crear una nueva ruta con los contenedores cargados.
+     * Lista de rutas existentes (JList) para inspeccionar rutas ya creadas.
+     * Botón "Inspeccionar ruta" que abre la vista de inspección para la ruta seleccionada.
+     * El botón "Zarpar del puerto" se habilita únicamente si hay contenedores cargados.
+     */
     @Override
     public void prepareGUI() {
         super.prepareGUI();
@@ -32,6 +45,7 @@ public class Inicio extends Vista {
             }
         });
 
+        // Cargar rutas existentes en el modelo
         for(int i = 0; i < Distribucion.rutas.getSize(); i++) {
             modelo.addElement(Distribucion.rutas.get(i));
         }
@@ -49,7 +63,7 @@ public class Inicio extends Vista {
             public void actionPerformed(ActionEvent e) {
                 Ruta seleccionada = listaDeRutas.getSelectedValue();
 
-                if( seleccionada == null ) {
+                if(seleccionada == null) {
                     return;
                 }
 
