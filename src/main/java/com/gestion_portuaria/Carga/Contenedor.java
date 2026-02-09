@@ -62,7 +62,35 @@ public class Contenedor extends Lista<Producto> {
         return false;  // Retorna false si no encuentra el producto
     }
 
-    // Inserta un producto al inicio de la lista (sobrescribe método de la clase padre)
+    public Producto eliminaProducto(String nombre) {
+        Nodo<Producto> actual = inicio;
+        Nodo<Producto> anterior = null;
+        boolean encontrado = false;
+
+        while(actual != null) {
+            if( actual.getDato().getNombre().contentEquals(nombre) ) {
+                encontrado = true;
+                break;
+            }
+            anterior = actual;
+            actual = actual.getSiguiente();
+        }
+
+        if(! encontrado ) {
+            return null;
+        }
+
+        if(anterior == null) {
+            return eliminaInicio();
+        }
+        else if( actual == ultimo ) {
+            return eliminaFinal();
+        }
+
+        anterior.setSiguiente(actual.getSiguiente());
+        return actual.getDato();
+    }
+
     @Override
     public void insertaInicio(Producto dato) {
         Nodo<Producto> nuevo = new Nodo<Producto>(dato);  // Crea un nuevo nodo con el producto

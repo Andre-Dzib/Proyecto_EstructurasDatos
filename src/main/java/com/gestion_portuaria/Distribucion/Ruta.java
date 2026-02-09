@@ -1,18 +1,59 @@
 package com.gestion_portuaria.Distribucion;
 
+import com.gestion_portuaria.Carga.Contenedor;
 import com.gestion_portuaria.Estructuras.ListaD;
+import com.gestion_portuaria.Estructuras.ListaSimple;
 import com.gestion_portuaria.Estructuras.NodoDoble;
 
 public class Ruta extends ListaD<Parada> {
+    private ListaSimple<Contenedor> contenedores;
+    private NodoDoble<Parada> paradaActual;
 
     //Crea una ruta sin paradas
     public Ruta() {
-        inicio = ultimo = null;  //punteros null
+        inicio = ultimo = paradaActual = null;
+        contenedores = null;
     }
 
     //Crea ruta con primera parada
     public Ruta(Parada parada) {
-        insertaInicio(parada);  // Inserta la parada recibida como inicio
+        insertaInicio(parada);
+        contenedores = null;
+    }
+
+    public NodoDoble<Parada> getParadaActual() {
+        return paradaActual;
+    }
+
+    public void siguienteParada() {
+        if( paradaActual == ultimo ) {
+            return;
+        }
+
+        paradaActual = paradaActual.getSiguiente();
+    }
+
+    public void anteriorParada() {
+        if( paradaActual == inicio ) {
+            return;
+        }
+
+        paradaActual = paradaActual.getAnterior();
+    }
+
+    public void setContenedores(ListaSimple<Contenedor> contenedores) {
+        this.contenedores = contenedores;
+    }
+
+    public int size() {
+        NodoDoble<Parada> actual = inicio;
+        int longitud = 0;
+        while( actual != null ) {
+            longitud++;
+            actual = actual.getSiguiente();
+        }
+
+        return longitud;
     }
 
     // Busca una parada por ID en la ruta circular
@@ -96,7 +137,11 @@ public class Ruta extends ListaD<Parada> {
             return;  // Termina sin insertar
         }
 
-        // Crea nuevo nodo con parada nueva
+        if( nodo == ultimo ) {
+            insertaFinal(nueva);
+            return;
+        }
+
         NodoDoble<Parada> nuevoNodo = new NodoDoble<Parada>(nueva);
         // Configura enlaces (igual que métodos anteriores)
         nuevoNodo.setAnterior(nodo);
@@ -105,40 +150,6 @@ public class Ruta extends ListaD<Parada> {
         nodo.setSiguiente(nuevoNodo);
     }
 
-    
-    public void cancelarParada(Parada cancelada) {
-        if( vacio() ) {  
-            return;  // No hace nada si no hay paradas
-        }
-
-        NodoDoble<Parada> nodo = buscarParada(cancelada.getId());  // Busca nodo a eliminar
-        if( nodo == null ) {  
-            return;  // Termina sin eliminar
-        }
-
-        // Caso 1: Único nodo en la lista
-        if (nodo == inicio && inicio == ultimo) {
-            inicio = ultimo = null;  // Lista queda vacía
-            return;
-        } 
-        // Caso 2: Nodo es el inicio
-        else if (nodo == inicio) {
-            inicio = nodo.getSiguiente();  // Nuevo inicio es siguiente nodo
-            return;
-        } 
-        // Caso 3: Nodo es el último
-        else if (nodo == ultimo) {
-            ultimo = nodo.getAnterior();  // Nuevo último es anterior nodo
-            return;
-        }
-
-        // Caso 4: Nodo está en medio
-        
-        nodo.getAnterior().setSiguiente(nodo.getSiguiente());
-        nodo.getSiguiente().setAnterior(nodo.getAnterior());
-    }
-
- 
     public void cancelarParada(String nombre) {
         if (vacio()) {  
             return;  // No hace nada si no hay paradas
@@ -151,17 +162,25 @@ public class Ruta extends ListaD<Parada> {
 
       
         if (nodo == inicio && inicio == ultimo) {
-            inicio = ultimo = null;
+            inicio = ultimo = paradaActual = null;
             return;
         } else if (nodo == inicio) {
             inicio = nodo.getSiguiente();
+            if( nodo == paradaActual ) {
+                paradaActual = inicio;
+            }
             return;
         } else if (nodo == ultimo) {
             ultimo = nodo.getAnterior();
+            if( nodo == paradaActual ) {
+                paradaActual = ultimo;
+            }
             return;
         }
 
-        
+        if( nodo == paradaActual ) {
+            paradaActual = nodo.getAnterior();
+        }
         nodo.getAnterior().setSiguiente(nodo.getSiguiente());
         nodo.getSiguiente().setAnterior(nodo.getAnterior());
     }
@@ -179,18 +198,29 @@ public class Ruta extends ListaD<Parada> {
 
         // Casos especiales iguales a métodos anteriores
         if( nodo == inicio && inicio == ultimo ) {
-            inicio = ultimo = null;
+            inicio = ultimo = paradaActual = null;
             return;
         }
         else if( nodo == inicio ) {
             inicio = nodo.getSiguiente();
+            inicio.setAnterior(null);
+            if( nodo == paradaActual ) {
+                paradaActual = inicio;
+            }
             return;
         }
         else if ( nodo == ultimo ) {
             ultimo = nodo.getAnterior();
+            ultimo.setSiguiente(null);
+            if( nodo == paradaActual ) {
+                paradaActual = ultimo;
+            }
             return;
         }
 
+        if( nodo == paradaActual ) {
+            paradaActual = nodo.getAnterior();
+        }
         // Reconexión para nodo en medio
         nodo.getAnterior().setSiguiente(nodo.getSiguiente());
         nodo.getSiguiente().setAnterior(nodo.getAnterior());
@@ -204,6 +234,8 @@ public class Ruta extends ListaD<Parada> {
             inicio = ultimo = insertar;  // Único nodo es inicio y fin
             inicio.setSiguiente(null); 
             inicio.setAnterior(null);
+            paradaActual = inicio;
+
             return;
         }
 
@@ -222,6 +254,8 @@ public class Ruta extends ListaD<Parada> {
             inicio = ultimo = insertar;  // Único nodo es inicio y fin
             inicio.setSiguiente(null); 
             inicio.setAnterior(null);
+            paradaActual = ultimo;
+
             return;
         }
 
@@ -237,14 +271,18 @@ public class Ruta extends ListaD<Parada> {
     public Parada eliminaInicio() {
         Parada eliminado = inicio.getDato();  // Guarda dato a eliminar
 
-        if( inicio == ultimo ) {  
-            inicio = ultimo = null; 
-            return eliminado;  // Retorna parada eliminada
+        if( inicio == ultimo ) {
+            inicio = ultimo = paradaActual = null;
+            return eliminado;
         }
 
-        // Reconfigura enlaces
-        inicio.getSiguiente().setAnterior(null);  
-        inicio = inicio.getSiguiente();  // Nuevo inicio es el siguiente nodo
+        inicio.getSiguiente().setAnterior(null);
+
+        if( paradaActual == inicio ) {
+            paradaActual = inicio.getSiguiente();
+        }
+
+        inicio = inicio.getSiguiente();
 
         return eliminado;  // Retorna parada eliminada
     }
@@ -254,14 +292,18 @@ public class Ruta extends ListaD<Parada> {
     public Parada eliminaFinal() {
         Parada eliminado = ultimo.getDato();  // Guarda dato a eliminar
 
-        if( inicio == ultimo ) {  
-            inicio = ultimo = null;  // Lista queda vacía
-            return eliminado;  // Retorna parada eliminada
+        if( inicio == ultimo ) {
+            inicio = ultimo = paradaActual = null;
+            return eliminado;
         }
 
-       
-        ultimo.getAnterior().setSiguiente(null);  
-        ultimo = ultimo.getAnterior();  // Nuevo último es el anterior nodo
+        ultimo.getAnterior().setSiguiente(null);
+
+        if( paradaActual == ultimo ) {
+            paradaActual = ultimo.getAnterior();
+        }
+
+        ultimo = ultimo.getAnterior();
 
         return eliminado;  // Retorna parada eliminada
     }
@@ -289,5 +331,10 @@ public class Ruta extends ListaD<Parada> {
 
         ruta.insertaDespuesDe(8, new Parada(20, "dirección 20"));  
         ruta.imprimir();  
+    }
+
+    @Override
+    public String toString() {
+        return inicio == null ? "Nueva ruta" : inicio.getDato().getNombre();
     }
 }

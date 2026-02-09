@@ -14,12 +14,12 @@ public class ColumnaContenedores implements Pila<Contenedor> {
         this.max = max;  // Establece límite de contenedores
     }
 
-    // Agrega contenedor si hay espacio (no retorna nada)
-    public void meterContenedor(Contenedor contenedor){
-        if( size() >= max ) {  // Verifica si columna llena
-            return;  // No hace nada si está llena
-        }
-        contenedores.insertaInicio(contenedor);  // Añade contenedor al inicio (cima)
+    public boolean isFull() {
+        return size() >= max;
+    }
+
+    public int getMax() {
+        return max;
     }
 
     // Igual que meterContenedor: apila contenedor si hay espacio (no retorna nada)
@@ -62,5 +62,4 @@ public class ColumnaContenedores implements Pila<Contenedor> {
     public boolean isEmpty() {
         return contenedores.vacio();  // Delegado a lista simple
     }
-    
 }

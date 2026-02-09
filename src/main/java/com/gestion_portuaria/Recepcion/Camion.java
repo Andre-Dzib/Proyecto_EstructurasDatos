@@ -11,6 +11,11 @@ public class Camion {
         placa = null;
     }
 
+    public Camion(String placa) {
+        this.contenedor = new Contenedor();
+        this.placa = placa;
+    }
+
     public Camion(Contenedor contenedor, String placa) {
         this.contenedor = contenedor;
         this.placa = placa;
