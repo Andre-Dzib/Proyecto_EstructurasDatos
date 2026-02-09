@@ -5,12 +5,13 @@ import com.gestion_portuaria.Estructuras.ListaSimple;
 import com.gestion_portuaria.Estructuras.Pila;
 
 public class ColumnaContenedores implements Pila<Contenedor> {
-    protected ListaSimple<Contenedor> contenedores;
-    protected int max;
+    protected ListaSimple<Contenedor> contenedores;  // Lista que almacena los contenedores
+    protected int max;  // Capacidad máxima de la columna
 
+    // Constructor: Crea columna vacía con capacidad máxima
     public ColumnaContenedores(int max) {
-        contenedores = new ListaSimple<Contenedor>();
-        this.max = max;
+        contenedores = new ListaSimple<Contenedor>();  // Inicializa lista vacía
+        this.max = max;  // Establece límite de contenedores
     }
 
     public boolean isFull() {
@@ -21,41 +22,44 @@ public class ColumnaContenedores implements Pila<Contenedor> {
         return max;
     }
 
+    // Igual que meterContenedor: apila contenedor si hay espacio (no retorna nada)
     @Override
     public void push(Contenedor x) {
-        if( size() >= max ) {
-            return;
+        if( size() >= max ) {  // Verifica capacidad
+            return;  // Ignora si columna llena
         }
-        contenedores.insertaInicio(x);
+        contenedores.insertaInicio(x);  // Inserta al inicio de la lista
     }
 
+    // Remueve y retorna contenedor de la cima, o null si vacía
     @Override
     public Contenedor pop() {
-        if( isEmpty() ){
-            System.out.println("La pila esta vacia");
-            return null;
+        if( isEmpty() ){  // Verifica si hay elementos
+            System.out.println("La pila esta vacia");  // Mensaje error
+            return null;  // Retorna null si vacía
         }
-
-        return contenedores.eliminaInicio();
+        return contenedores.eliminaInicio();  // Elimina y retorna primer elemento
     }
     
+    // Retorna contenedor en cima sin removerlo, o null si vacía
     @Override
     public Contenedor top() {
-        if( isEmpty() ){
-            System.out.println("La pila esta vacía");
-            return null;
+        if( isEmpty() ){  // Verifica si hay elementos
+            System.out.println("La pila esta vacía");  // Mensaje error
+            return null;  // Retorna null si vacía
         }
-
-        return contenedores.getInicio().getDato();
+        return contenedores.getInicio().getDato();  // Obtiene dato del primer nodo
     }
 
+    // Retorna cantidad actual de contenedores en columna
     @Override
     public int size() {
-        return contenedores.getSize();
+        return contenedores.getSize();  // Delegado a lista simple
     }
 
+    // Retorna true si columna vacía, false si tiene contenedores
     @Override
     public boolean isEmpty() {
-        return contenedores.vacio();
+        return contenedores.vacio();  // Delegado a lista simple
     }
 }
