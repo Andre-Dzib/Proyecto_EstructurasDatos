@@ -1,4 +1,4 @@
-package com.gestion_portuaria.Controladores;
+package com.gestion_portuaria.Vistas.Distribucion;
 
 import com.gestion_portuaria.Distribucion.Ruta;
 import com.gestion_portuaria.Vistas.Estilos;

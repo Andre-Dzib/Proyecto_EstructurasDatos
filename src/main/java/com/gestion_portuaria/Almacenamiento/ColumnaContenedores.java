@@ -4,62 +4,97 @@ import com.gestion_portuaria.Carga.Contenedor;
 import com.gestion_portuaria.Estructuras.ListaSimple;
 import com.gestion_portuaria.Estructuras.Pila;
 
+/**
+ * Se representa una columna de contenedores como una pila, donde un contenedor
+ * de abajo no se puede acceder sin quitar uno de los de encima.
+ * Permite checar su capacidad, meter, sacar y checar los contenedores que hay en la columna.
+ */
 public class ColumnaContenedores implements Pila<Contenedor> {
-    protected ListaSimple<Contenedor> contenedores;  // Lista que almacena los contenedores
-    protected int max;  // Capacidad máxima de la columna
+    /**
+     * Lista que almacena los contenedores
+     */
+    protected ListaSimple<Contenedor> contenedores;
+    /**
+     * Capacidad máxima de la columna
+     */
+    protected int max;
 
-    // Constructor: Crea columna vacía con capacidad máxima
+    /**
+     * Constructor por defecto de la clase, se le tiene que especificar un máximo a la pila creada
+     */
     public ColumnaContenedores(int max) {
-        contenedores = new ListaSimple<Contenedor>();  // Inicializa lista vacía
-        this.max = max;  // Establece límite de contenedores
+        contenedores = new ListaSimple<Contenedor>();
+        this.max = max;
     }
 
+    /**
+     * Indica si la pila de contenedores está llena, si es el caso retorna verdadero
+     * @return true si la pila está llena, en otro caso falso
+     */
     public boolean isFull() {
         return size() >= max;
     }
 
+    /**
+     * Getter del tope máximo de la pila
+     * @return El valor máximo de la pila
+     */
     public int getMax() {
         return max;
     }
 
-    // Igual que meterContenedor: apila contenedor si hay espacio (no retorna nada)
+    /**
+     * Ingresar un contenedor a la pila
+     * @param x El contenedor que se desea ingresar a la pila
+     */
     @Override
     public void push(Contenedor x) {
-        if( size() >= max ) {  // Verifica capacidad
-            return;  // Ignora si columna llena
+        if( size() >= max ) {
+            // Ignora si columna llena
+            return;
         }
-        contenedores.insertaInicio(x);  // Inserta al inicio de la lista
+        contenedores.insertaInicio(x);
     }
 
-    // Remueve y retorna contenedor de la cima, o null si vacía
+    /**
+     * Remueve el contenedor que está en la cima de la pila
+     * @return El contenedor de la cima, o si la pila está vacía null
+     */
     @Override
     public Contenedor pop() {
-        if( isEmpty() ){  // Verifica si hay elementos
-            System.out.println("La pila esta vacia");  // Mensaje error
-            return null;  // Retorna null si vacía
+        if( isEmpty() ){
+            return null;
         }
         return contenedores.eliminaInicio();  // Elimina y retorna primer elemento
     }
-    
-    // Retorna contenedor en cima sin removerlo, o null si vacía
+
+    /**
+     * Retorna el contenedor de la cima de la pila
+     * @return El contenedor de la cima, o si la pila está vacía null
+     */
     @Override
     public Contenedor top() {
-        if( isEmpty() ){  // Verifica si hay elementos
-            System.out.println("La pila esta vacía");  // Mensaje error
-            return null;  // Retorna null si vacía
+        if( isEmpty() ){
+            return null;
         }
-        return contenedores.getInicio().getDato();  // Obtiene dato del primer nodo
+        return contenedores.getInicio().getDato(); // Obtiene dato del primer nodo
     }
 
-    // Retorna cantidad actual de contenedores en columna
+    /**
+     * Getter del tamaño de la pila
+     * @return El tamaño de la pila
+     */
     @Override
     public int size() {
-        return contenedores.getSize();  // Delegado a lista simple
+        return contenedores.getSize();
     }
 
-    // Retorna true si columna vacía, false si tiene contenedores
+    /**
+     * Verifica si la pila está vacía
+     * @return Booleano que representa si la pila está vacía o no
+     */
     @Override
     public boolean isEmpty() {
-        return contenedores.vacio();  // Delegado a lista simple
+        return contenedores.vacio();
     }
 }
