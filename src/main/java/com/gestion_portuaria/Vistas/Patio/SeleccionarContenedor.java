@@ -1,8 +1,8 @@
 package com.gestion_portuaria.Vistas.Patio;
 
 import com.gestion_portuaria.Almacenamiento.ColumnaContenedores;
+import com.gestion_portuaria.Carga.Contenedor;
 import com.gestion_portuaria.Controladores.Patio;
-import com.gestion_portuaria.Vistas.Vista;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,31 @@ import java.awt.*;
  * mostrando botones por cada contenedor disponible en cada pila. Al seleccionar un
  * contenedor, se abre otra vista para visualizar su contenido.
  */
-public class SeleccionarContenedor extends Vista {
+public class SeleccionarContenedor extends JDialog {
+    /**
+     * El contenedor que se seleccióno en la vista
+     */
+    protected Contenedor contenedorSeleccionado = null;
+    /**
+     * El número de columna para el contenedor
+     */
+    protected int columna;
+    /**
+     * El número de fila del contenedor
+     */
+    protected int fila;
+
+    /**
+     * Constructor por defecto, crea el dialog de forma correcta
+     * @param parent
+     */
+    public SeleccionarContenedor(JFrame parent) {
+        super(parent, "Seleccionar contenedor", true);
+
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setBounds(0, 0, 500, 500);
+        prepareGUI();
+    }
     /**
      * Abre la vista de inspección para un contenedor específico.
      * Se mueve temporalmente cualquier contenedor que esté por encima del
@@ -31,21 +55,20 @@ public class SeleccionarContenedor extends Vista {
             auxiliar.push(columnaContenedores.pop());
         }
 
-        new InspeccionarContenedor(columnaContenedores.top()).run();
+        contenedorSeleccionado = columnaContenedores.top();
+        this.columna = numeroColumna;
+        this.fila = numeroFila;
 
         while(!auxiliar.isEmpty()) {
             columnaContenedores.push(auxiliar.pop());
         }
+        dispose();
     }
 
     /**
      * Configura la interfaz gráfica de la vista.
      */
-    @Override
     public void prepareGUI() {
-        super.prepareGUI();
-        window.setBounds(0, 0, 500, 500);
-
         JPanel listaPilas = new JPanel();
         listaPilas.setLayout(new BoxLayout(listaPilas, BoxLayout.X_AXIS));
 
@@ -83,6 +106,14 @@ public class SeleccionarContenedor extends Vista {
         JScrollPane scroll = new JScrollPane(listaPilas);
         scroll.setBounds(50, 50, 400, 400);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        window.add(scroll);
+        add(scroll);
+    }
+
+    /**
+     * Obtener el contenedor seleccionado en la vista
+     * @return El contendor obtenido en la vista, en otro caso, null
+     */
+    public Contenedor getContenedorSeleccionado() {
+        return contenedorSeleccionado;
     }
 }

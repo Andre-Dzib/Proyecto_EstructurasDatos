@@ -1,5 +1,6 @@
 package com.gestion_portuaria.Vistas.Patio;
 
+import com.gestion_portuaria.Almacenamiento.ColumnaContenedores;
 import com.gestion_portuaria.Carga.Contenedor;
 import com.gestion_portuaria.Controladores.Distribucion;
 import com.gestion_portuaria.Controladores.Patio;
@@ -67,22 +68,33 @@ public class Inicio extends Vista {
                 .addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        SeleccionarPila seleccionarPila = new SeleccionarPila(window, false);
-                        seleccionarPila.setVisible(true);
+                        SeleccionarContenedor seleccionarContenedor = new SeleccionarContenedor(window);
+                        seleccionarContenedor.setVisible(true);
 
-                        if( seleccionarPila.numeroPila == null ) {
+                        Contenedor contenedor = seleccionarContenedor.getContenedorSeleccionado();
+
+                        if( contenedor == null ) {
                             return;
                         }
-
-                        Contenedor contenedor = Patio.columnasContenedores.get(seleccionarPila.numeroPila).pop();
 
                         if(Distribucion.contenedoresCargados == null) {
                             Distribucion.contenedoresCargados = new ListaSimple<>();
                         }
 
-                        Distribucion.contenedoresCargados.insertaFinal(contenedor);
-                        status.setText("El contenedor de arriba de la pila "
-                                + (seleccionarPila.numeroPila + 1) + " ha salido para envío");
+                        ColumnaContenedores columnaContenedores = Patio.columnasContenedores.get(seleccionarContenedor.columna);
+                        ColumnaContenedores auxiliar = new ColumnaContenedores(columnaContenedores.getMax());
+
+                        while( columnaContenedores.top() != contenedor ) {
+                            auxiliar.push(columnaContenedores.pop());
+                        }
+
+                        Distribucion.contenedoresCargados.insertaFinal(columnaContenedores.pop());
+
+                        while( ! auxiliar.isEmpty() ) {
+                            columnaContenedores.push(auxiliar.pop());
+                        }
+
+                        status.setText("El contenedor ha salido para envío");
                     }
                 });
 
@@ -107,7 +119,15 @@ public class Inicio extends Vista {
                 .addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        new SeleccionarContenedor().run();
+                        SeleccionarContenedor seleccionarContenedor = new SeleccionarContenedor(window);
+                        seleccionarContenedor.setVisible(true);
+                        Contenedor contenedor = seleccionarContenedor.getContenedorSeleccionado();
+
+                        if(contenedor == null) {
+                            return;
+                        }
+
+                        new InspeccionarContenedor(contenedor).run();
                     }
                 });
     }
