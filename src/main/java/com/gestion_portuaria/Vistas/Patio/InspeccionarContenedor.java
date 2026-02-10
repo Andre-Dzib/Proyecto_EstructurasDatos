@@ -11,14 +11,38 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Vista para inspeccionar y gestionar el contenido de un contenedor.
+ * Permite:
+ * Visualizar la lista de productos con su ID, nombre y peso.
+ * Agregar nuevos productos al contenedor.
+ * Eliminar productos existentes.
+ * Calcular el peso total del contenedor.
+ */
 public class InspeccionarContenedor extends Vista {
+    /**
+     * Contenedor cuyos productos se van a inspeccionar.
+     */
     protected Contenedor contenedor;
+
+    /**
+     * Panel que muestra la lista de productos dentro del contenedor.
+     */
     protected JPanel listaProductos;
 
+    /**
+     * Constructor de la vista.
+     * @param contenedor Contenedor a inspeccionar.
+     */
     public InspeccionarContenedor(Contenedor contenedor) {
         this.contenedor = contenedor;
     }
 
+    /**
+     * Actualiza la lista de productos mostrada en la interfaz.
+     * Elimina los elementos existentes y genera un panel por cada producto
+     * con su ID, nombre, peso y un botón para eliminarlo.
+     */
     public void actualizarLista() {
         listaProductos.removeAll();
 
@@ -48,6 +72,9 @@ public class InspeccionarContenedor extends Vista {
         listaProductos.repaint();
     }
 
+    /**
+     * Configura la interfaz gráfica de la vista.
+     */
     @Override
     public void prepareGUI() {
         super.prepareGUI();
@@ -85,12 +112,11 @@ public class InspeccionarContenedor extends Vista {
                     peso = Double.parseDouble(
                             JOptionPane.showInputDialog(window, "Peso en kilos:")
                     );
-                } catch ( NumberFormatException error ) {
+                } catch (NumberFormatException error) {
                     JOptionPane.showMessageDialog(window, "No se ha especificado un peso valido");
                     return;
                 }
 
-                // Para simular una ID
                 int id = (int) (Math.random() * 10000);
                 contenedor.insertaFinal(new Producto(id, nombre, peso));
                 actualizarLista();
@@ -98,9 +124,5 @@ public class InspeccionarContenedor extends Vista {
         });
 
         actualizarLista();
-    }
-
-    public Contenedor getContenedor() {
-        return contenedor;
     }
 }

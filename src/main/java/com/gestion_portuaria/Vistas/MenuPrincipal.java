@@ -4,7 +4,20 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Clase que representa el menú principal de la aplicación.
+ * Proporciona accesos directos a los módulos de:
+ * Recepción de camiones (colas)
+ * Patio de contenedores (pilas)
+ * Logística y distribución (listas dobles)
+ * Reporte general
+ */
 public class MenuPrincipal extends Vista {
+    /**
+     * Configura la interfaz gráfica de la ventana.
+     * Crea el título y los botones que abren
+     * las vistas correspondientes a cada módulo.
+     */
     @Override
     public void prepareGUI() {
         super.prepareGUI();
@@ -26,18 +39,19 @@ public class MenuPrincipal extends Vista {
                 new com.gestion_portuaria.Vistas.Patio.Inicio().run();
             }
         });
+
         Estilos.botonCentrado(this, "Logística (Listas dobles)", 260).addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new com.gestion_portuaria.Vistas.Distribucion.Inicio().run();
             }
         });
+
         Estilos.botonCentrado(this, "Reporte general", 350).addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new com.gestion_portuaria.Vistas.Reporte.Inicio().run();
             }
         });
-
     }
 }

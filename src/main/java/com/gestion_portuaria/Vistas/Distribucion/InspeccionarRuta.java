@@ -1,6 +1,5 @@
 package com.gestion_portuaria.Vistas.Distribucion;
 
-import com.gestion_portuaria.Controladores.Navegacion;
 import com.gestion_portuaria.Distribucion.Parada;
 import com.gestion_portuaria.Distribucion.Ruta;
 import com.gestion_portuaria.Estructuras.NodoDoble;
@@ -12,18 +11,41 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
+/**
+ * Vista para inspeccionar y gestionar una ruta de distribución.
+ * Permite al usuario visualizar todas las paradas de la ruta, agregar nuevas paradas,
+ * eliminar paradas, simular la navegación de la ruta
+ */
 public class InspeccionarRuta extends Vista {
+    /**
+     * La ruta que se está inspeccionando y gestionando.
+     */
     private final Ruta ruta;
+
+    /**
+     * Panel que contiene la lista de paradas de la ruta.
+     */
     private JPanel listaRutas;
+
+    /**
+     * Contador utilizado para asignar IDs a nuevas paradas.
+     */
     private int contador;
 
-
+    /**
+     * Constructor de la vista.
+     * @param ruta La ruta que se desea inspeccionar.
+     */
     public InspeccionarRuta(Ruta ruta) {
         this.ruta = ruta;
         contador = 1;
     }
 
+    /**
+     * Actualiza la lista de paradas mostrada en la interfaz.
+     * Para cada parada de la ruta se crea una fila que incluye su nombre, un botón para agregar una parada posterior y un botón
+     * para eliminar la parada.
+     */
     public void actualizarLista() {
         listaRutas.removeAll();
 
@@ -43,10 +65,7 @@ public class InspeccionarRuta extends Vista {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     String nombre = JOptionPane.showInputDialog("Nombre de la parada");
-
-                    if( nombre == null || nombre.isEmpty() ) {
-                        return;
-                    }
+                    if(nombre == null || nombre.isEmpty()) return;
 
                     ruta.insertaDespuesDe(parada.getId(), new Parada(contador++, nombre));
                     actualizarLista();
@@ -60,6 +79,7 @@ public class InspeccionarRuta extends Vista {
                 actualizarLista();
             });
             fila.add(eliminar);
+
             listaRutas.add(fila);
             actual = actual.getSiguiente();
         }
@@ -68,6 +88,9 @@ public class InspeccionarRuta extends Vista {
         listaRutas.repaint();
     }
 
+    /**
+     * Prepara la interfaz gráfica de la vista.
+     */
     @Override
     public void prepareGUI() {
         super.prepareGUI();
@@ -87,10 +110,7 @@ public class InspeccionarRuta extends Vista {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String nombre = JOptionPane.showInputDialog(window, "Nombre de la parada");
-
-                if( nombre == null || nombre.isEmpty() ) {
-                    return;
-                }
+                if(nombre == null || nombre.isEmpty()) return;
 
                 ruta.insertaFinal(new Parada(contador++, nombre));
                 actualizarLista();
@@ -101,11 +121,10 @@ public class InspeccionarRuta extends Vista {
         agregar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if( ruta.vacio() ) {
+                if(ruta.vacio()) {
                     JOptionPane.showMessageDialog(window, "La ruta esta vacía, no se puede navegar");
                     return;
                 }
-
                 new Navegacion(ruta).run();
             }
         });

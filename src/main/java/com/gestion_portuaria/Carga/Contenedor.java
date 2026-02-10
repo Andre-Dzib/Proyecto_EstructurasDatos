@@ -3,65 +3,81 @@ package com.gestion_portuaria.Carga;
 import com.gestion_portuaria.Estructuras.Lista;
 import com.gestion_portuaria.Estructuras.Nodo;
 
+/**
+ * Representa un contenedor de productos implementado como una lista enlazada.
+ * Permite insertar, eliminar y consultar productos, así como calcular el peso total.
+ */
 public class Contenedor extends Lista<Producto> {
-    // Constructor vacío: Crea un contenedor vacío sin productos
+    /**
+     * Constructor por defecto, se crea un contenedor vacío sin productos
+     */
     public Contenedor(){
-        inicio = ultimo = null;  // Inicializa ambos punteros como null
-    }
-    // Constructor con producto: Crea contenedor con un primer producto
-    public Contenedor(Producto producto){
-        inicio = ultimo = new Nodo<Producto>(producto);  // Crea nodo con producto y lo asigna a inicio y ultimo
+        inicio = ultimo = null;
     }
 
-    // Calcula el peso total sumando el peso de todos los productos en el contenedor
+    /**
+     * Constructor con producto, crea el contenedor y agrega el producto automáticamente
+     * @param producto El producto a agregar
+     */
+    public Contenedor(Producto producto){
+        inicio = ultimo = new Nodo<Producto>(producto);
+    }
+
+    /**
+     * Calcula el peso total del contenedor
+     * @return El peso total del contenedor como un double
+     */
     public double getPesoTotal() {
         double pesoTotal = 0;  
         Nodo<Producto> actual = inicio;  
 
         while( actual != null ) {  
             pesoTotal += actual.getDato().getPeso();  
-            actual = actual.getSiguiente();  // Avanza al siguiente nodo
+            actual = actual.getSiguiente();
         }
 
-        return pesoTotal;  // Retorna la suma total de pesos
+        return pesoTotal;
     }
 
-     // Imprime el contenido del contenedor
-    public void imprimirContenido(){
-        Nodo<Producto> actual = inicio;  
-        while (actual != null){  
-            Producto producto = actual.getDato();  // Obtiene el producto del nodo actual
-            producto.imprimir();  
-            actual = actual.getSiguiente();  //  siguiente nodo
-        }
-    }
-
-    // Verifica si existe un producto con un ID específico
+    /**
+     * Busca en el contenedor actual si hay existencia de un producto en específico
+     * @param id El identificador del producto a buscar
+     * @return true el producto existe, en otro caso, falso
+     */
     public boolean existeProducto(int id){
         Nodo<Producto> actual = inicio;  
         while(actual != null){  
             Producto producto = actual.getDato();  
-            if( producto.getId() == id ) {  // Compara el ID del producto con el buscado
-                return true;  // Retorna true si encuentra coincidencia
+            if( producto.getId() == id ) {
+                return true;
             }
             actual = actual.getSiguiente();  
         }
-        return false;  // Retorna false si no encuentra el producto
+        return false;
     }
 
-    // Verifica si existe un producto con un nombre específico
+    /**
+     * Busca en el contenedor actual si hay existencia de un producto en específico
+     * @param nombre El nombre del producto a buscar
+     * @return true el producto existe, en otro caso, falso
+     */
     public boolean existeProducto(String nombre){
         Nodo<Producto> actual = inicio;  
         while(actual != null){ 
             Producto producto = actual.getDato();  
-            if( producto.getNombre().equals(nombre) ) {  // Compara el nombre del producto
-                return true;  // Retorna true si encuentra coincidencia
+            if( producto.getNombre().equals(nombre) ) {
+                return true;
             }
             actual = actual.getSiguiente();  
         }
-        return false;  // Retorna false si no encuentra el producto
+        return false;
     }
 
+    /**
+     * Elimina un producto del contenedor actual
+     * @param nombre El nombre del producto a eliminar
+     * @return El producto eliminado
+     */
     public Producto eliminaProducto(String nombre) {
         Nodo<Producto> actual = inicio;
         Nodo<Producto> anterior = null;
@@ -76,6 +92,7 @@ public class Contenedor extends Lista<Producto> {
             actual = actual.getSiguiente();
         }
 
+        // Si el producto a buscar no existe en la lista no elimina nada y retorna null
         if(! encontrado ) {
             return null;
         }
@@ -91,119 +108,78 @@ public class Contenedor extends Lista<Producto> {
         return actual.getDato();
     }
 
+    /**
+     * Insertar un producto al inicio de la lista
+     * @param dato El producto a insertar
+     */
     @Override
     public void insertaInicio(Producto dato) {
-        Nodo<Producto> nuevo = new Nodo<Producto>(dato);  // Crea un nuevo nodo con el producto
+        Nodo<Producto> nuevo = new Nodo<Producto>(dato);
         if( vacio() ) {  
-            inicio = ultimo = nuevo;  // El nuevo nodo es tanto inicio como fin
+            inicio = ultimo = nuevo;
+            return;
         }
-        else {  // Si ya hay elementos
-            nuevo.setSiguiente(inicio);  // El nuevo nodo apunta al actual inicio
-            inicio = nuevo;  // El nuevo nodo se convierte en el inicio
-        }
+        nuevo.setSiguiente(inicio);
+        inicio = nuevo;
     }
 
-  // Inserta un producto al final de la lista (sobrescribe método de la clase padre)
+    /**
+     * Inserta un producto al final de la lista
+     * @param dato El producto a insertar
+     */
     @Override
     public void insertaFinal(Producto dato) {
-        Nodo<Producto> nuevo = new Nodo<Producto>(dato);  // Crea un nuevo nodo con el producto
+        Nodo<Producto> nuevo = new Nodo<Producto>(dato);
         if( vacio() ){  
-            inicio = ultimo = nuevo;  // El nuevo nodo es tanto inicio como fin
+            inicio = ultimo = nuevo;
+            return;
         }
-        else{  // Si ya hay elementos
-            ultimo.setSiguiente(nuevo);  // El último actual apunta al nuevo nodo
-            ultimo = nuevo;  // El nuevo nodo se convierte en el último
-        }
+        ultimo.setSiguiente(nuevo);
+        ultimo = nuevo;
     }
 
-    // Elimina y retorna el producto del inicio de la lista (sobrescribe método de la clase padre)
+    /**
+     * Elimina el producto al inicio del contenedor
+     * @return El producto eliminado
+     */
     @Override
     public Producto eliminaInicio() {
         if ( vacio() ){ 
-            return null;  // Retorna null porque no hay nada que eliminar
+            return null;
         }
-        Producto productoEliminado = inicio.getDato();  // Guarda el producto que se va a eliminar
-        inicio = inicio.getSiguiente();  // apuntar siguiente nodo
+        Producto productoEliminado = inicio.getDato();
+        inicio = inicio.getSiguiente();
 
-        // Si después de eliminar el inicio queda vacio osea hay solo un nodo
+
         if( inicio == null ) {
-            ultimo = null;  // se actualiza último a null
+            ultimo = null;
         }
-        return productoEliminado;  // Retorna el producto eliminado
+        return productoEliminado;
     }
 
 
-   // Elimina y retorna el producto del final de la lista (sobrescribe método de la clase padre)
+    /**
+     * Elimina el producto al final del contenedor
+     * @return El producto eliminado
+     */
     @Override
     public Producto eliminaFinal() {
         if( vacio() ) {  
-            return null;  // Retorna null porque no hay nada que eliminar
+            return null;
         }
 
-        Producto productoEliminado = ultimo.getDato();  // Guarda el producto 
-        if ( inicio == ultimo ){  // solo hay un elemento en la lista
-            inicio = ultimo = null;  // vacio
+        Producto productoEliminado = ultimo.getDato();
+        if ( inicio == ultimo ){
+            inicio = ultimo = null;
         }
-        else{  // más de un elemento
+        else{
             Nodo<Producto> actual = inicio; 
-            while( actual.getSiguiente() != ultimo ){  // Busca el penúltimo nodo
-                actual = actual.getSiguiente();  // Avanza hasta encontrar el penúltimo
+            while( actual.getSiguiente() != ultimo ){
+                actual = actual.getSiguiente();
             }
-            actual.setSiguiente(null);  //se convierte en el ultimo
-            ultimo = actual;  // Actualiza el puntero
+            actual.setSiguiente(null);
+            ultimo = actual;
         }
-        return productoEliminado;  // Retorna el producto eliminado
-    }
-
-   
-    // Pruebas
-    public static void main(String[] args) {
-        Contenedor contenedor = new Contenedor();
-        contenedor.insertaInicio(new Producto(1, "Palomas", 10.1));
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.insertaInicio(new Producto(2, "Chocolate en barra", 10.2));
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.insertaFinal(new Producto(3, "Chocolate blanco", 10.2));
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.insertaInicio(new Producto(4, "Chocolate con nuez", 10.2));
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.insertaInicio(new Producto(5, "Chocolate con almendra", 10.2));
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.insertaFinal(new Producto(6, "Vainilla", 10.1));
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        System.out.println("\n\n\n________________________________________________\n\n\n");
-        System.out.println("Lista de productos dentro del contenedor");
-        contenedor.imprimirContenido();
-        System.out.println("Confirmar si existe producto con ID 6... " + contenedor.existeProducto(6));
-        System.out.println("Confirmar si existe producto con nombre: 'Vainilla'... " + contenedor.existeProducto("Vainilla"));
-        System.out.println("\n\n\n________________________________________________\n\n\n");
-        System.out.println("Lista de productos en proceso de eliminación");
-        contenedor.imprimirContenido();
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.eliminaInicio();
-        System.out.println("\n --------- Se elimino el primero");
-        contenedor.imprimirContenido();
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.eliminaFinal();
-        System.out.println("\n --------- Se elimino el ultimo");
-        contenedor.imprimirContenido();
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.eliminaInicio();
-        System.out.println("\n --------- Se elimino el primero");
-        contenedor.imprimirContenido();
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.eliminaFinal();
-        System.out.println("\n --------- Se elimino el ultimo");
-        contenedor.imprimirContenido();
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.eliminaInicio();
-        System.out.println("\n --------- Se elimino el primero");
-        contenedor.imprimirContenido();
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        contenedor.eliminaInicio();
-        System.out.println("\n --------- Se elimino el primero");
-        System.out.println("Peso actual de contenedor: " + contenedor.getPesoTotal() + " kg");
-        System.out.println("Confirmar si aun existe producto con ID 6 ... " + contenedor.existeProducto(6));
-        System.out.println("Confirmar si aun existe producto con nombre: 'Vainilla' ... " + contenedor.existeProducto("Vainilla"));
+        return productoEliminado;
     }
 }
