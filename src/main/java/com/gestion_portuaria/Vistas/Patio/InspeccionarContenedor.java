@@ -59,7 +59,7 @@ public class InspeccionarContenedor extends Vista {
 
             JButton eliminar = new JButton("X");
             eliminar.addActionListener(e -> {
-                contenedor.eliminaProducto(producto.getNombre());
+                contenedor.eliminaProducto(producto.getId());
                 actualizarLista();
             });
 
@@ -117,7 +117,7 @@ public class InspeccionarContenedor extends Vista {
                     return;
                 }
 
-                int id = (int) (Math.random() * 10000);
+                int id = contenedor.getUltimo() == null ? 1 : contenedor.getUltimo().getDato().getId() + 1;
                 contenedor.insertaFinal(new Producto(id, nombre, peso));
                 actualizarLista();
             }

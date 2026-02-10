@@ -109,6 +109,41 @@ public class Contenedor extends Lista<Producto> {
     }
 
     /**
+     * Elimina un producto del contenedor actual
+     * @param nombre El nombre del producto a eliminar
+     * @return El producto eliminado
+     */
+    public Producto eliminaProducto(int id) {
+        Nodo<Producto> actual = inicio;
+        Nodo<Producto> anterior = null;
+        boolean encontrado = false;
+
+        while(actual != null) {
+            if( actual.getDato().getId() == id ) {
+                encontrado = true;
+                break;
+            }
+            anterior = actual;
+            actual = actual.getSiguiente();
+        }
+
+        // Si el producto a buscar no existe en la lista no elimina nada y retorna null
+        if(! encontrado ) {
+            return null;
+        }
+
+        if(anterior == null) {
+            return eliminaInicio();
+        }
+        else if( actual == ultimo ) {
+            return eliminaFinal();
+        }
+
+        anterior.setSiguiente(actual.getSiguiente());
+        return actual.getDato();    
+    }
+
+    /**
      * Insertar un producto al inicio de la lista
      * @param dato El producto a insertar
      */
