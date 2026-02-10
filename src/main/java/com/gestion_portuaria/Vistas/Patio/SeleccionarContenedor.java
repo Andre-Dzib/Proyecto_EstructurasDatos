@@ -21,15 +21,15 @@ public class SeleccionarContenedor extends JDialog {
     /**
      * El número de columna para el contenedor
      */
-    protected int columna;
+    protected int columna = -1;
     /**
      * El número de fila del contenedor
      */
-    protected int fila;
+    protected int fila = -1;
 
     /**
-     * Constructor por defecto, crea el dialog de forma correcta
-     * @param parent
+     * Constructor por defecto, crea la ventana de díalogo de forma correcta
+     * @param parent La ventana padre que crea la ventana de díalogo
      */
     public SeleccionarContenedor(JFrame parent) {
         super(parent, "Seleccionar contenedor", true);
@@ -38,6 +38,7 @@ public class SeleccionarContenedor extends JDialog {
         setBounds(0, 0, 500, 500);
         prepareGUI();
     }
+
     /**
      * Abre la vista de inspección para un contenedor específico.
      * Se mueve temporalmente cualquier contenedor que esté por encima del
@@ -115,5 +116,21 @@ public class SeleccionarContenedor extends JDialog {
      */
     public Contenedor getContenedorSeleccionado() {
         return contenedorSeleccionado;
+    }
+
+    /**
+     * Devuelve el número de columna en el patio de contenedores que se seleccionó
+     * @return El número de columna seleccionada, en caso de que no se haya seleccionado ninguna, devuelve -1
+     */
+    public int getColumna() {
+        return columna;
+    }
+
+    /**
+     * Devuelve el número de fila en el patio de contenedores que se seleccionó
+     * @return El número de fila seleccionada, en caso de que no se haya seleccionado ninguna, devuelve -1
+     */
+    public int getFila() {
+        return fila;
     }
 }

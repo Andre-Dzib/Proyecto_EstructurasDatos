@@ -81,7 +81,7 @@ public class Inicio extends Vista {
                             Distribucion.contenedoresCargados = new ListaSimple<>();
                         }
 
-                        ColumnaContenedores columnaContenedores = Patio.columnasContenedores.get(seleccionarContenedor.columna);
+                        ColumnaContenedores columnaContenedores = Patio.columnasContenedores.get(seleccionarContenedor.getColumna());
                         ColumnaContenedores auxiliar = new ColumnaContenedores(columnaContenedores.getMax());
 
                         while( columnaContenedores.top() != contenedor ) {
